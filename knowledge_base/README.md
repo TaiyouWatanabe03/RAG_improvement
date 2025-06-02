@@ -19,4 +19,6 @@ cat ~/.aws/config
 npx cdk deploy --profile aws_poc
 git status
 git add
-gitb
+git commit -m"
+git log --oneline
+git push origin git

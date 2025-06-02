@@ -1,25 +1,17 @@
 #!/usr/bin/env node
-import * as cdk from 'aws-cdk-lib';
-import { KnowledgeBaseStack } from '../lib/knowledge_base-stack';
-import { BedrockStack } from '../lib/stacks/bedrock-stack';
-// import { OpenSearchStack } from '../lib/stacks/opensearch-stack';
-// import { BedrockStack } from '../lib/stacks/bedrock-stack';
+import { App } from 'aws-cdk-lib';
+import { OpenSearchStack } from '../lib/opensearch-stack';
+import { BedrockStack } from '../lib/bedrock-stack';
 
+const app = new App();
 
-const app = new cdk.App();
+// OpenSearchStack を先にデプロイして、collectionArn を取得
+const opensearch = new OpenSearchStack(app, 'OpenSearchStack', {
+  env: { region: 'ap-northeast-1' }, // 東京リージョン
+});
 
-// はじめに、OpenSeaerch Stackをdeployします。
-// const opensearchStack = new OpenSearchStack(app, 'OpenSearchStack', {
-//   // env:{
-//   //   account:process.env.CDK_DEFAULT_ACCOUNT,
-//   //   region:process.env.CDK_DEFAULT_REGION || 'ap-northeast-1'
-//   // }
-// });
-
-// 次に、Bedrock Stackをdeployします。
-
-const bedrockStack = new BedrockStack(app,'BedrockStack', {
-  collectionArn: 'arn:aws:bedrock:us-east-1:111122223333:collection/cdk-collection',
-  bucketArn: 'arn:aws:s3:::cdk-bucket',
-  bedrockRoleArn: 'arn:aws:iam::111122223333:role/iamrole'
+// BedrockStack に collectionArn を渡してデプロイ
+new BedrockStack(app, 'BedrockStack', {
+  env: { region: 'ap-northeast-1' },
+  collectionArn: opensearch.collection.attrArn,
 });

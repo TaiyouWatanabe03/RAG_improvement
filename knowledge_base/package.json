@@ -6,9 +6,11 @@
   },
   "scripts": {
     "build": "tsc",
+    "build:lambda": "tsc -p lambda/tsconfig.json",
     "watch": "tsc -w",
     "test": "jest",
-    "cdk": "cdk"
+    "cdk": "cdk",
+    "cdk:deploy": "npm run build:lambda && cdk deploy"
   },
   "devDependencies": {
     "@types/jest": "^29.5.14",

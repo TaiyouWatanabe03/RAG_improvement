@@ -1,0 +1,51 @@
+{
+  "version": "41.0.0",
+  "files": {
+    "faa95a81ae7d7373f3e1f242268f904eb748d8d0fdd306e8a6fe515a1905a7d6": {
+      "displayName": "BedrockStack/Custom::S3AutoDeleteObjectsCustomResourceProvider Code",
+      "source": {
+        "path": "asset.faa95a81ae7d7373f3e1f242268f904eb748d8d0fdd306e8a6fe515a1905a7d6",
+        "packaging": "zip"
+      },
+      "destinations": {
+        "current_account-ap-northeast-1": {
+          "bucketName": "cdk-hnb659fds-assets-${AWS::AccountId}-ap-northeast-1",
+          "objectKey": "faa95a81ae7d7373f3e1f242268f904eb748d8d0fdd306e8a6fe515a1905a7d6.zip",
+          "region": "ap-northeast-1",
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-file-publishing-role-${AWS::AccountId}-ap-northeast-1"
+        }
+      }
+    },
+    "8eb5bb216b6dc9698a235ac90b683c2b53e84ad7db253274b1c70c1010829339": {
+      "displayName": "BedrockQueryLambda/Code",
+      "source": {
+        "path": "asset.8eb5bb216b6dc9698a235ac90b683c2b53e84ad7db253274b1c70c1010829339",
+        "packaging": "zip"
+      },
+      "destinations": {
+        "current_account-ap-northeast-1": {
+          "bucketName": "cdk-hnb659fds-assets-${AWS::AccountId}-ap-northeast-1",
+          "objectKey": "8eb5bb216b6dc9698a235ac90b683c2b53e84ad7db253274b1c70c1010829339.zip",
+          "region": "ap-northeast-1",
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-file-publishing-role-${AWS::AccountId}-ap-northeast-1"
+        }
+      }
+    },
+    "d8231306443db685e3b7a01468b7a54ba8697ec0b32d34d62f09d63173de1eb3": {
+      "displayName": "BedrockStack Template",
+      "source": {
+        "path": "BedrockStack.template.json",
+        "packaging": "file"
+      },
+      "destinations": {
+        "current_account-ap-northeast-1": {
+          "bucketName": "cdk-hnb659fds-assets-${AWS::AccountId}-ap-northeast-1",
+          "objectKey": "d8231306443db685e3b7a01468b7a54ba8697ec0b32d34d62f09d63173de1eb3.json",
+          "region": "ap-northeast-1",
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-file-publishing-role-${AWS::AccountId}-ap-northeast-1"
+        }
+      }
+    }
+  },
+  "dockerImages": {}
+}

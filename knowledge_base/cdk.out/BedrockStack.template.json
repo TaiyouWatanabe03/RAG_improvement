@@ -1,0 +1,537 @@
+{
+ "Resources": {
+  "DocumentBucketAE41E5A9": {
+   "Type": "AWS::S3::Bucket",
+   "Properties": {
+    "Tags": [
+     {
+      "Key": "aws-cdk:auto-delete-objects",
+      "Value": "true"
+     }
+    ]
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "BedrockStack/DocumentBucket/Resource"
+   }
+  },
+  "DocumentBucketPolicyBF1D786A": {
+   "Type": "AWS::S3::BucketPolicy",
+   "Properties": {
+    "Bucket": {
+     "Ref": "DocumentBucketAE41E5A9"
+    },
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "s3:DeleteObject*",
+        "s3:GetBucket*",
+        "s3:List*",
+        "s3:PutBucketPolicy"
+       ],
+       "Effect": "Allow",
+       "Principal": {
+        "AWS": {
+         "Fn::GetAtt": [
+          "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092",
+          "Arn"
+         ]
+        }
+       },
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "DocumentBucketAE41E5A9",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "DocumentBucketAE41E5A9",
+             "Arn"
+            ]
+           },
+           "/*"
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "BedrockStack/DocumentBucket/Policy/Resource"
+   }
+  },
+  "DocumentBucketAutoDeleteObjectsCustomResourceEE0C7BB4": {
+   "Type": "Custom::S3AutoDeleteObjects",
+   "Properties": {
+    "ServiceToken": {
+     "Fn::GetAtt": [
+      "CustomS3AutoDeleteObjectsCustomResourceProviderHandler9D90184F",
+      "Arn"
+     ]
+    },
+    "BucketName": {
+     "Ref": "DocumentBucketAE41E5A9"
+    }
+   },
+   "DependsOn": [
+    "DocumentBucketPolicyBF1D786A"
+   ],
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "BedrockStack/DocumentBucket/AutoDeleteObjectsCustomResource/Default"
+   }
+  },
+  "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Version": "2012-10-17",
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ]
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Sub": "arn:${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "BedrockStack/Custom::S3AutoDeleteObjectsCustomResourceProvider/Role"
+   }
+  },
+  "CustomS3AutoDeleteObjectsCustomResourceProviderHandler9D90184F": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": {
+      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-ap-northeast-1"
+     },
+     "S3Key": "faa95a81ae7d7373f3e1f242268f904eb748d8d0fdd306e8a6fe515a1905a7d6.zip"
+    },
+    "Timeout": 900,
+    "MemorySize": 128,
+    "Handler": "index.handler",
+    "Role": {
+     "Fn::GetAtt": [
+      "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs20.x",
+    "Description": {
+     "Fn::Join": [
+      "",
+      [
+       "Lambda function for auto-deleting objects in ",
+       {
+        "Ref": "DocumentBucketAE41E5A9"
+       },
+       " S3 bucket."
+      ]
+     ]
+    }
+   },
+   "DependsOn": [
+    "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "BedrockStack/Custom::S3AutoDeleteObjectsCustomResourceProvider/Handler",
+    "aws:asset:path": "asset.faa95a81ae7d7373f3e1f242268f904eb748d8d0fdd306e8a6fe515a1905a7d6",
+    "aws:asset:property": "Code"
+   }
+  },
+  "BedrockExecutionRole9C52C73A": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "bedrock.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/AmazonBedrockFullAccess"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "BedrockStack/BedrockExecutionRole/Resource"
+   }
+  },
+  "KnowledgeBase": {
+   "Type": "AWS::Bedrock::KnowledgeBase",
+   "Properties": {
+    "Description": "Simple KB",
+    "KnowledgeBaseConfiguration": {
+     "Type": "VECTOR",
+     "VectorKnowledgeBaseConfiguration": {
+      "EmbeddingModelArn": "arn:aws:bedrock:ap-northeast-1::foundation-model/amazon.titan-embed-text-v1"
+     }
+    },
+    "Name": "simple-knowledge-base",
+    "RoleArn": {
+     "Fn::ImportValue": "OpenSearchStack:ExportsOutputFnGetAttOpenSearchAccessRole4BBF2670Arn2611FF3E"
+    },
+    "StorageConfiguration": {
+     "OpensearchServerlessConfiguration": {
+      "CollectionArn": {
+       "Fn::ImportValue": "OpenSearchStack:ExportsOutputFnGetAttVectorCollectionArn0FC57D53"
+      },
+      "FieldMapping": {
+       "MetadataField": "metadata",
+       "TextField": "text",
+       "VectorField": "vector"
+      },
+      "VectorIndexName": "simple-index"
+     },
+     "Type": "OPENSEARCH_SERVERLESS"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "BedrockStack/KnowledgeBase"
+   }
+  },
+  "BedrockQueryLambdaServiceRole3F6FBF16": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "BedrockStack/BedrockQueryLambda/ServiceRole/Resource"
+   }
+  },
+  "BedrockQueryLambdaServiceRoleDefaultPolicy05600A73": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": "bedrock:RetrieveAndGenerate",
+       "Effect": "Allow",
+       "Resource": "*"
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "BedrockQueryLambdaServiceRoleDefaultPolicy05600A73",
+    "Roles": [
+     {
+      "Ref": "BedrockQueryLambdaServiceRole3F6FBF16"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "BedrockStack/BedrockQueryLambda/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "BedrockQueryLambda4D1790B9": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": {
+      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-ap-northeast-1"
+     },
+     "S3Key": "8eb5bb216b6dc9698a235ac90b683c2b53e84ad7db253274b1c70c1010829339.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "KNOWLEDGE_BASE_ID": {
+       "Ref": "KnowledgeBase"
+      },
+      "REGION": "ap-northeast-1"
+     }
+    },
+    "Handler": "lambda_function.handler",
+    "Role": {
+     "Fn::GetAtt": [
+      "BedrockQueryLambdaServiceRole3F6FBF16",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs18.x"
+   },
+   "DependsOn": [
+    "BedrockQueryLambdaServiceRoleDefaultPolicy05600A73",
+    "BedrockQueryLambdaServiceRole3F6FBF16"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "BedrockStack/BedrockQueryLambda/Resource",
+    "aws:asset:path": "asset.8eb5bb216b6dc9698a235ac90b683c2b53e84ad7db253274b1c70c1010829339",
+    "aws:asset:is-bundled": false,
+    "aws:asset:property": "Code"
+   }
+  },
+  "BedrockQueryApiE32319F0": {
+   "Type": "AWS::ApiGateway::RestApi",
+   "Properties": {
+    "Name": "Bedrock Query Service"
+   },
+   "Metadata": {
+    "aws:cdk:path": "BedrockStack/BedrockQueryApi/Resource"
+   }
+  },
+  "BedrockQueryApiDeployment265DF2843c778d0b7ba6e2a7e5f8b9ee9825da4e": {
+   "Type": "AWS::ApiGateway::Deployment",
+   "Properties": {
+    "Description": "Automatically created by the RestApi construct",
+    "RestApiId": {
+     "Ref": "BedrockQueryApiE32319F0"
+    }
+   },
+   "DependsOn": [
+    "BedrockQueryApiPOST2B1CE9EC"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "BedrockStack/BedrockQueryApi/Deployment/Resource"
+   }
+  },
+  "BedrockQueryApiDeploymentStageprodD8B22A67": {
+   "Type": "AWS::ApiGateway::Stage",
+   "Properties": {
+    "DeploymentId": {
+     "Ref": "BedrockQueryApiDeployment265DF2843c778d0b7ba6e2a7e5f8b9ee9825da4e"
+    },
+    "RestApiId": {
+     "Ref": "BedrockQueryApiE32319F0"
+    },
+    "StageName": "prod"
+   },
+   "Metadata": {
+    "aws:cdk:path": "BedrockStack/BedrockQueryApi/DeploymentStage.prod/Resource"
+   }
+  },
+  "BedrockQueryApiPOSTApiPermissionBedrockStackBedrockQueryApiF7A63F0APOST8059246A": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "BedrockQueryLambda4D1790B9",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:aws:execute-api:ap-northeast-1:",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "BedrockQueryApiE32319F0"
+       },
+       "/",
+       {
+        "Ref": "BedrockQueryApiDeploymentStageprodD8B22A67"
+       },
+       "/POST/"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "BedrockStack/BedrockQueryApi/Default/POST/ApiPermission.BedrockStackBedrockQueryApiF7A63F0A.POST.."
+   }
+  },
+  "BedrockQueryApiPOSTApiPermissionTestBedrockStackBedrockQueryApiF7A63F0APOST5703BE8E": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "BedrockQueryLambda4D1790B9",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:aws:execute-api:ap-northeast-1:",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "BedrockQueryApiE32319F0"
+       },
+       "/test-invoke-stage/POST/"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "BedrockStack/BedrockQueryApi/Default/POST/ApiPermission.Test.BedrockStackBedrockQueryApiF7A63F0A.POST.."
+   }
+  },
+  "BedrockQueryApiPOST2B1CE9EC": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "NONE",
+    "HttpMethod": "POST",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:aws:apigateway:ap-northeast-1:lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "BedrockQueryLambda4D1790B9",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "ResourceId": {
+     "Fn::GetAtt": [
+      "BedrockQueryApiE32319F0",
+      "RootResourceId"
+     ]
+    },
+    "RestApiId": {
+     "Ref": "BedrockQueryApiE32319F0"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "BedrockStack/BedrockQueryApi/Default/POST/Resource"
+   }
+  },
+  "CDKMetadata": {
+   "Type": "AWS::CDK::Metadata",
+   "Properties": {
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/71TTW/bMAz9LdWxULQu3Q7LLUk3oNhHg6Q3IygYiXWU2JIh0QkCwf99sCS37opht50k85F8j0/0VHz88lncXMHZT6Q6Tiq9E2FDII8czv4p+FsRFq08IhWBOaztCaqVrbS8sBlT6MnZC+MMWrJ3WCHhw+6AkjybkWux2/Lls0n1PB2puAhsFz/ZjF2zcVrCc/ICPBbbjmuoRVjbCovAwPu2RrW4sFlgjdNG6gaquZS2Nakdzzl9wVyStiaxcFaDgRJV5NDo2awIb2KXucu5247/XyqlHu1qoBgcLkJGiUDu702lDb5g7Jr9A4y29tJ4dr1XPBQ82h551+d9WKkNAWGNhnyWFBunnh3foXJWHsXy2Xw39lyhKrF/OF5BvVMgwrfWRGv6DWoN6Rqzd3swqkKXv6RVA4DmpJ01PWX2M+r4Og7HYUYi/wJGqYOCKBtdrb3X1nTc3z6B90hezPuDQ6NLIDzDRYQ1epo3Oq59vP2CLDz7mqL8DpvKXnraIvR/hHS6eVkEzqDR+eaQQJvXdD8e7dH+sKWWUN2rscev2XxDUGKkGEIjMRHka/S2dTK6H9+P/0TaW5VmiNDgPFGTsBzQhrB0MBJu4xR+RJIKuo4vW0+2HtgSU3IkBv7AV86etEIXdyL63KvVpuTjDnzo8tBS01LHjVUoDv7DafpJ3Ijp1cFrPcn7I9bp/A2jMddwvgQAAA=="
+   },
+   "Metadata": {
+    "aws:cdk:path": "BedrockStack/CDKMetadata/Default"
+   }
+  }
+ },
+ "Outputs": {
+  "BedrockQueryApiEndpointDF1084B4": {
+   "Value": {
+    "Fn::Join": [
+     "",
+     [
+      "https://",
+      {
+       "Ref": "BedrockQueryApiE32319F0"
+      },
+      ".execute-api.ap-northeast-1.",
+      {
+       "Ref": "AWS::URLSuffix"
+      },
+      "/",
+      {
+       "Ref": "BedrockQueryApiDeploymentStageprodD8B22A67"
+      },
+      "/"
+     ]
+    ]
+   }
+  }
+ },
+ "Parameters": {
+  "BootstrapVersion": {
+   "Type": "AWS::SSM::Parameter::Value<String>",
+   "Default": "/cdk-bootstrap/hnb659fds/version",
+   "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+  }
+ },
+ "Rules": {
+  "CheckBootstrapVersion": {
+   "Assertions": [
+    {
+     "Assert": {
+      "Fn::Not": [
+       {
+        "Fn::Contains": [
+         [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+         ],
+         {
+          "Ref": "BootstrapVersion"
+         }
+        ]
+       }
+      ]
+     },
+     "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+    }
+   ]
+  }
+ }
+}

@@ -1,0 +1,483 @@
+{
+  "version": "41.0.0",
+  "artifacts": {
+    "OpenSearchStack.assets": {
+      "type": "cdk:asset-manifest",
+      "properties": {
+        "file": "OpenSearchStack.assets.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+      }
+    },
+    "OpenSearchStack": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://unknown-account/ap-northeast-1",
+      "properties": {
+        "templateFile": "OpenSearchStack.template.json",
+        "terminationProtection": false,
+        "validateOnSynth": false,
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-deploy-role-${AWS::AccountId}-ap-northeast-1",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-cfn-exec-role-${AWS::AccountId}-ap-northeast-1",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-ap-northeast-1/e64ffbdc8b98327f1bf7ed9aa14904743966c2739038051856a38bf3b6b09c75.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
+        "additionalDependencies": [
+          "OpenSearchStack.assets"
+        ],
+        "lookupRole": {
+          "arn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-lookup-role-${AWS::AccountId}-ap-northeast-1",
+          "requiresBootstrapStackVersion": 8,
+          "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+        }
+      },
+      "dependencies": [
+        "OpenSearchStack.assets"
+      ],
+      "metadata": {
+        "/OpenSearchStack/OpenSearchAccessRole": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "assumedBy": {
+                "principalAccount": "*",
+                "assumeRoleAction": "*"
+              }
+            }
+          }
+        ],
+        "/OpenSearchStack/OpenSearchAccessRole/ImportOpenSearchAccessRole": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          }
+        ],
+        "/OpenSearchStack/OpenSearchAccessRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "OpenSearchAccessRole4BBF2670"
+          }
+        ],
+        "/OpenSearchStack/EncryptionPolicy": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "EncryptionPolicy"
+          }
+        ],
+        "/OpenSearchStack/AccessPolicy": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AccessPolicy"
+          }
+        ],
+        "/OpenSearchStack/VectorCollection": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VectorCollection"
+          }
+        ],
+        "/OpenSearchStack/CDKMetadata/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadata"
+          }
+        ],
+        "/OpenSearchStack/Exports/Output{\"Fn::GetAtt\":[\"OpenSearchAccessRole4BBF2670\",\"Arn\"]}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ExportsOutputFnGetAttOpenSearchAccessRole4BBF2670Arn2611FF3E"
+          }
+        ],
+        "/OpenSearchStack/Exports/Output{\"Fn::GetAtt\":[\"VectorCollection\",\"Arn\"]}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ExportsOutputFnGetAttVectorCollectionArn0FC57D53"
+          }
+        ],
+        "/OpenSearchStack/BootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BootstrapVersion"
+          }
+        ],
+        "/OpenSearchStack/CheckBootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CheckBootstrapVersion"
+          }
+        ]
+      },
+      "displayName": "OpenSearchStack"
+    },
+    "BedrockStack.assets": {
+      "type": "cdk:asset-manifest",
+      "properties": {
+        "file": "BedrockStack.assets.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+      }
+    },
+    "BedrockStack": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://unknown-account/ap-northeast-1",
+      "properties": {
+        "templateFile": "BedrockStack.template.json",
+        "terminationProtection": false,
+        "validateOnSynth": false,
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-deploy-role-${AWS::AccountId}-ap-northeast-1",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-cfn-exec-role-${AWS::AccountId}-ap-northeast-1",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-ap-northeast-1/d8231306443db685e3b7a01468b7a54ba8697ec0b32d34d62f09d63173de1eb3.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
+        "additionalDependencies": [
+          "BedrockStack.assets"
+        ],
+        "lookupRole": {
+          "arn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-lookup-role-${AWS::AccountId}-ap-northeast-1",
+          "requiresBootstrapStackVersion": 8,
+          "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+        }
+      },
+      "dependencies": [
+        "OpenSearchStack",
+        "BedrockStack.assets"
+      ],
+      "metadata": {
+        "/BedrockStack/DocumentBucket": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "removalPolicy": "destroy",
+              "autoDeleteObjects": true
+            }
+          }
+        ],
+        "/BedrockStack/DocumentBucket/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "DocumentBucketAE41E5A9"
+          }
+        ],
+        "/BedrockStack/DocumentBucket/Policy": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "bucket": "*"
+            }
+          }
+        ],
+        "/BedrockStack/DocumentBucket/Policy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "DocumentBucketPolicyBF1D786A"
+          }
+        ],
+        "/BedrockStack/DocumentBucket/AutoDeleteObjectsCustomResource": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          }
+        ],
+        "/BedrockStack/DocumentBucket/AutoDeleteObjectsCustomResource/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "DocumentBucketAutoDeleteObjectsCustomResourceEE0C7BB4"
+          }
+        ],
+        "/BedrockStack/Custom::S3AutoDeleteObjectsCustomResourceProvider": [
+          {
+            "type": "aws:cdk:is-custom-resource-handler-customResourceProvider",
+            "data": true
+          }
+        ],
+        "/BedrockStack/Custom::S3AutoDeleteObjectsCustomResourceProvider/Role": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092"
+          }
+        ],
+        "/BedrockStack/Custom::S3AutoDeleteObjectsCustomResourceProvider/Handler": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CustomS3AutoDeleteObjectsCustomResourceProviderHandler9D90184F"
+          }
+        ],
+        "/BedrockStack/BedrockExecutionRole": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "assumedBy": {
+                "principalAccount": "*",
+                "assumeRoleAction": "*"
+              },
+              "managedPolicies": [
+                {
+                  "managedPolicyArn": "*"
+                }
+              ]
+            }
+          }
+        ],
+        "/BedrockStack/BedrockExecutionRole/ImportBedrockExecutionRole": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          }
+        ],
+        "/BedrockStack/BedrockExecutionRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BedrockExecutionRole9C52C73A"
+          }
+        ],
+        "/BedrockStack/KnowledgeBase": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "KnowledgeBase"
+          }
+        ],
+        "/BedrockStack/BedrockQueryLambda": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "runtime": "*",
+              "handler": "*",
+              "code": "*",
+              "environment": "*"
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addEnvironment": [
+                "*",
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addEnvironment": [
+                "*",
+                "*"
+              ]
+            }
+          }
+        ],
+        "/BedrockStack/BedrockQueryLambda/ServiceRole": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "assumedBy": {
+                "principalAccount": "*",
+                "assumeRoleAction": "*"
+              },
+              "managedPolicies": [
+                {
+                  "managedPolicyArn": "*"
+                }
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addToPrincipalPolicy": [
+                {}
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachInlinePolicy": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachInlinePolicy": [
+                "*"
+              ]
+            }
+          }
+        ],
+        "/BedrockStack/BedrockQueryLambda/ServiceRole/ImportServiceRole": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          }
+        ],
+        "/BedrockStack/BedrockQueryLambda/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BedrockQueryLambdaServiceRole3F6FBF16"
+          }
+        ],
+        "/BedrockStack/BedrockQueryLambda/ServiceRole/DefaultPolicy": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachToRole": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachToRole": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addStatements": [
+                {}
+              ]
+            }
+          }
+        ],
+        "/BedrockStack/BedrockQueryLambda/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BedrockQueryLambdaServiceRoleDefaultPolicy05600A73"
+          }
+        ],
+        "/BedrockStack/BedrockQueryLambda/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BedrockQueryLambda4D1790B9"
+          }
+        ],
+        "/BedrockStack/BedrockQueryApi": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "restApiName": "*"
+            }
+          }
+        ],
+        "/BedrockStack/BedrockQueryApi/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BedrockQueryApiE32319F0"
+          }
+        ],
+        "/BedrockStack/BedrockQueryApi/Deployment": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "description": "*",
+              "api": "*",
+              "retainDeployments": "*"
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addToLogicalId": [
+                {}
+              ]
+            }
+          }
+        ],
+        "/BedrockStack/BedrockQueryApi/Deployment/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BedrockQueryApiDeployment265DF2843c778d0b7ba6e2a7e5f8b9ee9825da4e"
+          }
+        ],
+        "/BedrockStack/BedrockQueryApi/DeploymentStage.prod": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "deployment": "*"
+            }
+          }
+        ],
+        "/BedrockStack/BedrockQueryApi/DeploymentStage.prod/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BedrockQueryApiDeploymentStageprodD8B22A67"
+          }
+        ],
+        "/BedrockStack/BedrockQueryApi/Endpoint": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BedrockQueryApiEndpointDF1084B4"
+          }
+        ],
+        "/BedrockStack/BedrockQueryApi/Default": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          }
+        ],
+        "/BedrockStack/BedrockQueryApi/Default/POST": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "resource": "*",
+              "httpMethod": "*",
+              "integration": "*",
+              "options": "*"
+            }
+          }
+        ],
+        "/BedrockStack/BedrockQueryApi/Default/POST/ApiPermission.BedrockStackBedrockQueryApiF7A63F0A.POST..": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BedrockQueryApiPOSTApiPermissionBedrockStackBedrockQueryApiF7A63F0APOST8059246A"
+          }
+        ],
+        "/BedrockStack/BedrockQueryApi/Default/POST/ApiPermission.Test.BedrockStackBedrockQueryApiF7A63F0A.POST..": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BedrockQueryApiPOSTApiPermissionTestBedrockStackBedrockQueryApiF7A63F0APOST5703BE8E"
+          }
+        ],
+        "/BedrockStack/BedrockQueryApi/Default/POST/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BedrockQueryApiPOST2B1CE9EC"
+          }
+        ],
+        "/BedrockStack/CDKMetadata/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadata"
+          }
+        ],
+        "/BedrockStack/BootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BootstrapVersion"
+          }
+        ],
+        "/BedrockStack/CheckBootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CheckBootstrapVersion"
+          }
+        ]
+      },
+      "displayName": "BedrockStack"
+    },
+    "Tree": {
+      "type": "cdk:tree",
+      "properties": {
+        "file": "tree.json"
+      }
+    }
+  },
+  "minimumCliVersion": "2.1005.0"
+}

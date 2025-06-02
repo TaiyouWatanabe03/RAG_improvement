@@ -1,0 +1,21 @@
+{
+  "version": "41.0.0",
+  "files": {
+    "e64ffbdc8b98327f1bf7ed9aa14904743966c2739038051856a38bf3b6b09c75": {
+      "displayName": "OpenSearchStack Template",
+      "source": {
+        "path": "OpenSearchStack.template.json",
+        "packaging": "file"
+      },
+      "destinations": {
+        "current_account-ap-northeast-1": {
+          "bucketName": "cdk-hnb659fds-assets-${AWS::AccountId}-ap-northeast-1",
+          "objectKey": "e64ffbdc8b98327f1bf7ed9aa14904743966c2739038051856a38bf3b6b09c75.json",
+          "region": "ap-northeast-1",
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-file-publishing-role-${AWS::AccountId}-ap-northeast-1"
+        }
+      }
+    }
+  },
+  "dockerImages": {}
+}

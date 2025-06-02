@@ -1,0 +1,141 @@
+{
+ "Resources": {
+  "OpenSearchAccessRole4BBF2670": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "bedrock.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "OpenSearchStack/OpenSearchAccessRole/Resource"
+   }
+  },
+  "EncryptionPolicy": {
+   "Type": "AWS::OpenSearchServerless::SecurityPolicy",
+   "Properties": {
+    "Name": "encryption-policy",
+    "Policy": "{\"Rules\":[{\"ResourceType\":\"collection\",\"Resource\":[\"collection/simple-vector-collection\"]}],\"AWSOwnedKey\":true}",
+    "Type": "encryption"
+   },
+   "Metadata": {
+    "aws:cdk:path": "OpenSearchStack/EncryptionPolicy"
+   }
+  },
+  "AccessPolicy": {
+   "Type": "AWS::OpenSearchServerless::AccessPolicy",
+   "Properties": {
+    "Name": "access-policy",
+    "Policy": {
+     "Fn::Join": [
+      "",
+      [
+       "[{\"Rules\":[{\"ResourceType\":\"collection\",\"Resource\":[\"collection/simple-vector-collection\"],\"Permission\":[\"aoss:*\"]}],\"Principal\":[\"",
+       {
+        "Fn::GetAtt": [
+         "OpenSearchAccessRole4BBF2670",
+         "Arn"
+        ]
+       },
+       "\"]}]"
+      ]
+     ]
+    },
+    "Type": "data"
+   },
+   "Metadata": {
+    "aws:cdk:path": "OpenSearchStack/AccessPolicy"
+   }
+  },
+  "VectorCollection": {
+   "Type": "AWS::OpenSearchServerless::Collection",
+   "Properties": {
+    "Name": "simple-vector-collection",
+    "Type": "VECTORSEARCH"
+   },
+   "DependsOn": [
+    "AccessPolicy",
+    "EncryptionPolicy"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "OpenSearchStack/VectorCollection"
+   }
+  },
+  "CDKMetadata": {
+   "Type": "AWS::CDK::Metadata",
+   "Properties": {
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/0WMwYrCMBRFv8UsJX1qcRbjrvYHpC5FJPP6xKdpUvISpYT8u9QZmNXlHu65NWy+v2C9MC+psH9Uln8gH6PBhzYvuWQ2A+TOWzplZUTSQP1+UrusxsAOeTS2QfTJRbVTS6X/NrPQYGTvPriUs26vbqZF+5GckAl4EwpPCpZEILdXdyRMgeN08JZxmoUGkUT+e+utpc9tKboj8SkgndRSnYt2vie4y+pZb2EN9eIuzFVILvJA0P3mG+6oTFvtAAAA"
+   },
+   "Metadata": {
+    "aws:cdk:path": "OpenSearchStack/CDKMetadata/Default"
+   }
+  }
+ },
+ "Outputs": {
+  "ExportsOutputFnGetAttOpenSearchAccessRole4BBF2670Arn2611FF3E": {
+   "Value": {
+    "Fn::GetAtt": [
+     "OpenSearchAccessRole4BBF2670",
+     "Arn"
+    ]
+   },
+   "Export": {
+    "Name": "OpenSearchStack:ExportsOutputFnGetAttOpenSearchAccessRole4BBF2670Arn2611FF3E"
+   }
+  },
+  "ExportsOutputFnGetAttVectorCollectionArn0FC57D53": {
+   "Value": {
+    "Fn::GetAtt": [
+     "VectorCollection",
+     "Arn"
+    ]
+   },
+   "Export": {
+    "Name": "OpenSearchStack:ExportsOutputFnGetAttVectorCollectionArn0FC57D53"
+   }
+  }
+ },
+ "Parameters": {
+  "BootstrapVersion": {
+   "Type": "AWS::SSM::Parameter::Value<String>",
+   "Default": "/cdk-bootstrap/hnb659fds/version",
+   "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+  }
+ },
+ "Rules": {
+  "CheckBootstrapVersion": {
+   "Assertions": [
+    {
+     "Assert": {
+      "Fn::Not": [
+       {
+        "Fn::Contains": [
+         [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+         ],
+         {
+          "Ref": "BootstrapVersion"
+         }
+        ]
+       }
+      ]
+     },
+     "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+    }
+   ]
+  }
+ }
+}
